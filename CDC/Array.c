@@ -73,43 +73,44 @@ int main(){
     // }
 
 
-
-    int arr[3][3];
+    int n;
+    scanf("%d",&n);
+    int arr[n];
     
-    for(int i=0;i<3;i++){
-        for(int j=0;j<3;j++){
-            scanf("%d",&arr[i][j]);
-        }
-    }
+    // for(int i=0;i<3;i++){
+    //     for(int j=0;j<3;j++){
+    //         scanf("%d",&arr[i][j]);
+    //     }
+    // }
 
-    for(int i=0;i<3;i++){
-        for(int j=0;j<3;j++){
-            printf("%d ",arr[i][j]);
-        }
-        printf("\n");
-    }
+    // for(int i=0;i<3;i++){
+    //     for(int j=0;j<3;j++){
+    //         printf("%d ",arr[i][j]);
+    //     }
+    //     printf("\n");
+    // }
 
-    printf("\n");
+    // printf("\n");
 
-    int max;
-    for(int i=0;i<3;i++){
-        max=arr[i][0];
-        for(int j=1;j<3;j++){
-            if(arr[i][j]>max) max=arr[i][j];
-        } 
-        printf("%d\n",max);
-    }
+    // int max;
+    // for(int i=0;i<3;i++){
+    //     max=arr[i][0];
+    //     for(int j=1;j<3;j++){
+    //         if(arr[i][j]>max) max=arr[i][j];
+    //     } 
+    //     printf("%d\n",max);
+    // }
 
 
-    int min;
-    for(int i=0;i<3;i++){
-        min=arr[i][0];
-        for(int j=1;j<3;j++){
-            if(arr[i][j]<min) min=arr[i][j];
-        } 
-        printf("%d\n",min);
-    }
+    // int min;
+    // for(int i=0;i<3;i++){
+    //     min=arr[i][0];
+    //     for(int j=1;j<3;j++){
+    //         if(arr[i][j]<min) min=arr[i][j];
+    //     } 
+    //     printf("%d\n",min);
+    // }
 
-    
+
 
 }   

@@ -9,6 +9,7 @@ int main() {
     }
     else if(n<=0) {
         printf("Enter a positive INTEGER");
+        exit(0);
     }
     else {
         while(i<=n/2) {
