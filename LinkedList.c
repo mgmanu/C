@@ -1,8 +1,8 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 
 // Structure for the linked list node
-
 typedef struct node {
     int data;
     struct node *next;
@@ -13,8 +13,8 @@ Node* getNode(int data) {
     Node *newNode = (Node*)malloc(sizeof(Node));
 
     if (newNode == NULL) {
-        printf("Memory allocation failed.\n");
-        exit(1);
+        printf("Out of Memory\n");
+        return NULL;
     }
 
     newNode->data = data;
@@ -27,6 +27,9 @@ Node* getNode(int data) {
 Node* insertionAtBegin(Node *head, int new_data) {
     Node *newNode = getNode(new_data);
 
+    if (newNode == NULL)
+        return head;
+
     newNode->next = head;
     head = newNode;
 
@@ -37,22 +40,25 @@ Node* insertionAtBegin(Node *head, int new_data) {
 Node* insertionAtEnd(Node *head, int new_data) {
     Node *newNode = getNode(new_data);
 
+    if (newNode == NULL)
+        return head;
+
     if (head == NULL) {
         return newNode;
     }
 
-    Node *temp = head;
+    Node *lastNode = head;
 
-    while (temp->next != NULL) {
-        temp = temp->next;
+    while (lastNode->next != NULL) {
+        lastNode = lastNode->next;
     }
 
-    temp->next = newNode;
+    lastNode->next = newNode;
 
     return head;
 }
 
-// Insert at specific 1-based position
+// Insert at a specific 1-based position
 Node* insertAtPosition(Node *head, int position, int value) {
     if (position < 1) {
         printf("Invalid position.\n");
@@ -63,22 +69,26 @@ Node* insertAtPosition(Node *head, int position, int value) {
         return insertionAtBegin(head, value);
     }
 
-    Node *temp = head;
-    int i;
+    Node *current = head;
+    int currentPosition = 1;
 
-    for (i = 1; i < position - 1 && temp != NULL; i++) {
-        temp = temp->next;
+    while (current != NULL && currentPosition < position - 1) {
+        current = current->next;
+        currentPosition++;
     }
 
-    if (temp == NULL) {
-        printf("Invalid position.\n");
+    if (current == NULL) {
+        printf("Position is beyond the end of the list.\n");
         return head;
     }
 
     Node *newNode = getNode(value);
 
-    newNode->next = temp->next;
-    temp->next = newNode;
+    if (newNode == NULL)
+        return head;
+
+    newNode->next = current->next;
+    current->next = newNode;
 
     return head;
 }
@@ -86,8 +96,8 @@ Node* insertAtPosition(Node *head, int position, int value) {
 // Delete from beginning
 Node* deleteFromBeginning(Node *head) {
     if (head == NULL) {
-        printf("List is empty.\n");
-        return NULL;
+        printf("The list is empty.\n");
+        return head;
     }
 
     Node *temp = head;
@@ -101,8 +111,8 @@ Node* deleteFromBeginning(Node *head) {
 // Delete from end
 Node* deleteFromEnd(Node *head) {
     if (head == NULL) {
-        printf("List is empty.\n");
-        return NULL;
+        printf("The list is empty.\n");
+        return head;
     }
 
     if (head->next == NULL) {
@@ -122,68 +132,53 @@ Node* deleteFromEnd(Node *head) {
     return head;
 }
 
-// Delete first node with specific key
+// Delete the first node with a specific key
 Node* deleteNodeWithKey(Node *head, int key) {
     if (head == NULL) {
-        printf("List is empty.\n");
-        return NULL;
-    }
-
-    if (head->data == key) {
-        Node *temp = head;
-        head = head->next;
-
-        free(temp);
-
+        printf("The list is empty.\n");
         return head;
     }
 
-    Node *temp = head;
+    Node *current = head;
+    Node *prev = NULL;
 
-    while (temp->next != NULL && temp->next->data != key) {
-        temp = temp->next;
-    }
-
-    if (temp->next == NULL) {
-        printf("Key not found.\n");
+    if (current->data == key) {
+        head = current->next;
+        free(current);
         return head;
     }
 
-    Node *deleteNode = temp->next;
+    while (current != NULL && current->data != key) {
+        prev = current;
+        current = current->next;
+    }
 
-    temp->next = deleteNode->next;
+    if (current == NULL) {
+        printf("Key not found in the list.\n");
+        return head;
+    }
 
-    free(deleteNode);
+    prev->next = current->next;
+    free(current);
 
     return head;
 }
 
-// Traverse the linked list
+// Traverse and display the linked list
 void traverseLinkedList(Node *head) {
-    if (head == NULL) {
+    Node *current = head;
+
+    if (current == NULL) {
         printf("List is empty.\n");
         return;
     }
 
-    Node *temp = head;
-
-    while (temp != NULL) {
-        printf("%d -> ", temp->data);
-        temp = temp->next;
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
     }
 
     printf("NULL\n");
-}
-
-// Free all nodes
-void freeList(Node *head) {
-    Node *temp;
-
-    while (head != NULL) {
-        temp = head;
-        head = head->next;
-        free(temp);
-    }
 }
 
 int main() {
@@ -253,7 +248,9 @@ int main() {
                 break;
 
             case 8:
-                freeList(head);
+                while (head != NULL) {
+                    head = deleteFromBeginning(head);
+                }
 
                 printf("Program terminated.\n");
                 return 0;
